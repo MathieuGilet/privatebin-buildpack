@@ -1,0 +1,22 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": [
+        "github>1024pix/renovate-config:default.json"
+    ],
+    "enabled": true,
+    "includeForks": true,
+    "minimumReleaseAge": "0",
+    "regexManagers": [
+        {
+            "fileMatch": [
+                "^bin/version$"
+            ],
+            "matchStrings": [
+                "^(?<currentValue>\\S+)\\n?$"
+            ],
+            "depNameTemplate": "privatebin/privatebin",
+            "datasourceTemplate": "github-tags",
+            "extractVersionTemplate": "(?<version>.*)"
+        }
+    ]
+}

@@ -1,0 +1,41 @@
+#!/bin/sh
+
+set -eu
+
+BUILD_DIR=$1
+
+if [ -z "$BUILD_DIR" ]; then
+  echo "Usage: $0 <build-dir>"
+  exit 1
+fi
+
+
+
+SCRIPT_DIR="$(dirname "$0")"
+
+mkdir -p "$BUILD_DIR/PrivateBin/"
+echo "-----> Downloading PrivateBin..."
+
+PRIVATEBIN_VERSION=$(cat "${SCRIPT_DIR}/version")
+git clone -b "$PRIVATEBIN_VERSION" "https://github.com/PrivateBin/PrivateBin.git" "$BUILD_DIR/PrivateBin"
+
+mv $BUILD_DIR/PrivateBin/* $BUILD_DIR
+# Merge composer json
+
+#echo -n "-----> Merging composer.json..."
+
+src="$SCRIPT_DIR/utils/scalingo-composer-requirement.json"
+dest="$BUILD_DIR/composer.json"
+
+
+sed -i 's/\\\\/##/g' "$dest"
+merged=$(jq  -s '.[0] * .[1]' "$src" "$dest")
+echo "$merged" > "$dest"
+sed -i 's/##/\\\\/g' "$dest"
+
+# add custom config files
+
+cp "$SCRIPT_DIR/utils/custom-conf.php" "$BUILD_DIR/cfg/" 
+cp "$SCRIPT_DIR/utils/Procfile" "$BUILD_DIR/Procfile"
+cp "$SCRIPT_DIR/utils/start.sh" "$BUILD_DIR/bin/"
+echo "done"

@@ -1,0 +1,23 @@
+{
+  "extra": {
+    "paas": {
+      "document-root": "",
+      "index-document": "index.php",
+      "engines": {
+        "nginx": "default"
+      },
+      "framework": "",
+      "php-config": [],
+      "php-includes": [],
+      "php-fpm-config": [],
+      "php-fpm-includes": [],
+      "nginx-includes": [],
+      "log-files": [],
+      "compile": [
+        "composer require aws/aws-sdk-php"
+      ],
+      "new-relic": false,
+      "access-log-format": ""
+    }
+  }
+}
